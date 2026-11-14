@@ -305,8 +305,7 @@ async def test_add_drive_uses_exact_rpc_shape_and_wait_hook(
                     ]
                 ],
                 "nb_1",
-                [2],
-                [1, None, None, None, None, None, None, None, None, None, [1]],
+                [2, None, None, [1, None, None, None, None, None, None, None, None, None, [1]]],
             ],
             "source_path": "/notebook/nb_1",
             "allow_null": True,

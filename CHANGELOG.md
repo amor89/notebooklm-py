@@ -180,6 +180,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Drive source add migrated to the nested request-options template** (#1546).
+  `sources.add_drive` now sends the shared `build_template_block()` wrapper
+  (`[2, None, None, [1, …, [1]]]`) instead of the old flat `[2], [1, …, [1]]`
+  tail — the same migration already applied to every other `ADD_SOURCE` variant,
+  `ADD_SOURCE_FILE`, and `CREATE_NOTEBOOK`. Migrated (Gemini-3.5) backends reject
+  the old tail (`status=5`/`9`), so Drive adds could fail on migrated accounts;
+  the 11-slot source entry (Drive ref in slot 0, trailing `1`) is unchanged. The
+  `sources_add_drive` cassette and the add-service shape test were updated to the
+  migrated payload.
+
 - **Video Overview visual-style values now match the live NotebookLM Web UI**
   (#1594). `VideoStyle` previously used stale numeric values, so several named
   styles could serialize as the wrong style on the wire. `CUSTOM` now reflects

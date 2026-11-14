@@ -215,15 +215,17 @@ class SourceAddService:
             None,
             1,
         ]
-        # TODO(#1546): Drive add is NOT yet migrated to the nested template
-        # block — no live Drive capture/probe yet, so it stays on the old
-        # [2], [1,...,[1]] tail. Migrate via build_template_block() once a Drive
-        # add is captured from the web UI and verified against a live account.
+        # Nested template block per the Gemini-3.5 wire migration (#1546): the
+        # flat ``[2], [1,...,[1]]`` tail (2 outer elements) collapsed into the
+        # single shared ``build_template_block()`` block the web UI now sends —
+        # the same wrapper every other ADD_SOURCE variant, ADD_SOURCE_FILE, and
+        # CREATE_NOTEBOOK already use; migrated backends reject the old tail
+        # (``status=5``/``9``). The 11-slot source entry (Drive ref in slot 0,
+        # trailing ``1``) is unchanged.
         params = [
             [source_data],
             notebook_id,
-            [2],
-            [1, None, None, None, None, None, None, None, None, None, [1]],
+            build_template_block(),
         ]
 
         async def _create() -> Source:
